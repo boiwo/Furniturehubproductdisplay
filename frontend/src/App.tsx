@@ -22,27 +22,36 @@ export default function App() {
   // Fetch products from API on component mount with fallback to static data
   useEffect(() => {
     const loadProducts = async () => {
+      console.log('🚀 Starting to load products...');
       try {
         setLoading(true);
+        console.log('📡 Fetching products from API...');
         const fetchedProducts = await fetchProducts();
+        console.log('📦 Fetched products:', fetchedProducts);
         
         if (fetchedProducts && fetchedProducts.length > 0) {
+          console.log('✅ Setting products from API:', fetchedProducts.length);
           setProducts(fetchedProducts);
           toast.success('Products loaded from backend API');
         } else {
+          console.log('⚠️ No products from API, loading fallback data...');
           // Fallback to static data if API fails
           const { products: staticProducts } = await import('./data/products');
+          console.log('📋 Static products loaded:', staticProducts.length);
           setProducts(staticProducts);
           toast.success('Products loaded from local data (API connection ready)');
         }
       } catch (error) {
-        console.error('Error loading products:', error);
+        console.error('❌ Error loading products:', error);
+        console.log('🔄 Loading fallback data...');
         // Fallback to static data
         const { products: staticProducts } = await import('./data/products');
+        console.log('📋 Fallback products loaded:', staticProducts.length);
         setProducts(staticProducts);
         toast.success('Products loaded from local data');
       } finally {
         setLoading(false);
+        console.log('🏁 Loading complete');
       }
     };
 

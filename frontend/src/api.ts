@@ -6,11 +6,23 @@ const BASE_URL = "/api";
 // GET all products
 export const fetchProducts = async (): Promise<Product[]> => {
     try {
+        console.log('🔄 Fetching products from:', `${BASE_URL}/products`);
         const response = await fetch(`${BASE_URL}/products`);
-        if (!response.ok) throw new Error("Failed to fetch products");
-        return await response.json();
+        console.log('📡 Response status:', response.status);
+        console.log('📡 Response ok:', response.ok);
+        
+        if (!response.ok) {
+            throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        console.log('✅ Products fetched successfully:', data.length, 'items');
+        console.log('📋 First product:', data[0]);
+        
+        return data;
     } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error('❌ Error fetching products:', error);
+        console.log('📋 Returning empty array as fallback');
         return [];
     }
 };
