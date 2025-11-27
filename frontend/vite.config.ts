@@ -56,5 +56,12 @@
     server: {
       port: 3000,
       open: true,
+      proxy: {
+        '/api': {
+          target: 'https://furniturehubproductdisplay-1.onrender.com',
+          changeOrigin: true,
+          secure: true,
+        },
+      },
     },
   });

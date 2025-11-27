@@ -1,7 +1,7 @@
 // src/api.ts
 import { Product } from "./types/product";
 
-const BASE_URL = "https://furniturehubproductdisplay-1.onrender.com/api";
+const BASE_URL = "/api";
 
 // GET all products
 export const fetchProducts = async (): Promise<Product[]> => {

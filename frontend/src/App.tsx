@@ -1,14 +1,15 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Header } from './components/Header';
 import { FilterSidebar } from './components/FilterSidebar';
 import { ProductCard } from './components/ProductCard';
 import { Cart } from './components/Cart';
 import { ProductModal } from './components/ProductModal';
-import { products } from './data/products';
 import { Product, CartItem } from './types/product';
-import { toast } from 'sonner@2.0.3';
+import { toast } from 'sonner';
+import { fetchProducts } from './api';
 
 export default function App() {
+  const [products, setProducts] = useState<Product[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -16,6 +17,26 @@ export default function App() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 50000]);
   const [sortBy, setSortBy] = useState('featured');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from API on component mount
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const fetchedProducts = await fetchProducts();
+        setProducts(fetchedProducts);
+        toast.success('Products loaded successfully');
+      } catch (error) {
+        console.error('Error loading products:', error);
+        toast.error('Failed to load products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
 
   // Filter and sort products
   const filteredProducts = useMemo(() => {
@@ -128,12 +149,21 @@ export default function App() {
             {/* Results Header */}
             <div className="mb-6 flex items-center justify-between">
               <p className="text-gray-600">
-                Showing {filteredProducts.length} of {products.length} products
+                {loading ? (
+                  'Loading products...'
+                ) : (
+                  `Showing ${filteredProducts.length} of ${products.length} products`
+                )}
               </p>
             </div>
 
-            {/* Products */}
-            {filteredProducts.length === 0 ? (
+            {/* Loading State */}
+            {loading ? (
+              <div className="text-center py-20">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-600 mx-auto"></div>
+                <p className="text-gray-500 mt-4">Loading products...</p>
+              </div>
+            ) : filteredProducts.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-gray-500 mb-4">No products found</p>
                 <p className="text-sm text-gray-400">Try adjusting your filters</p>

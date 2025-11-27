@@ -188,7 +188,7 @@ export function Cart({ isOpen, onClose, items, onUpdateQuantity, onRemoveItem, o
               className="w-full bg-orange-600 hover:bg-orange-700"
               onClick={() => setOrderForm(true)}
             >
-              Make Order
+              proceed to checkout
             </Button>
           </div>
         )}
