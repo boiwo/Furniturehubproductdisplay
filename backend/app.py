@@ -6,10 +6,17 @@ import os
 app = Flask(__name__)
 
 # Configure CORS to allow requests from any origin (including localhost)
-CORS(app, 
-     origins=["http://localhost:3000",  "http://127.0.0.1:3000", "http://127.0.0.1:3001"],
+from flask_cors import CORS
+
+CORS(app,
+     origins=[
+         "http://localhost:3000",
+         "http://127.0.0.1:3000",
+         "https://furniturehubproductdisplay.vercel.app",
+         "https://furniturehubproductdisplay-ky38-8s53401id-benard.vercel.app"
+     ],
      methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-     allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+     allow_headers=["Content-Type", "Authorization"],
      supports_credentials=True)
 
 # -----------------------------
