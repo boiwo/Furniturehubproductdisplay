@@ -4,7 +4,13 @@ from flask_cors import CORS
 import os
 
 app = Flask(__name__)
-CORS(app)
+
+# Configure CORS to allow requests from any origin (including localhost)
+CORS(app, 
+     origins=["http://localhost:3000",  "http://127.0.0.1:3000", "http://127.0.0.1:3001"],
+     methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+     allow_headers=["Content-Type", "Authorization", "X-Requested-With"],
+     supports_credentials=True)
 
 # -----------------------------
 # Database Configuration
